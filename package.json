@@ -26,7 +26,8 @@
     "eslint-plugin-unicorn": "^10.0.0",
     "husky": "^3.0.5",
     "lint-staged": "^9.2.5",
-    "prettier": "^1.18.2"
+    "prettier": "^1.18.2",
+    "sass": "^1.22.10"
   },
   "lint-staged": {
     "*.js": [

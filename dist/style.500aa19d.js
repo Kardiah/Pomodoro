@@ -117,195 +117,79 @@ parcelRequire = (function (modules, cache, entry, globalName) {
   }
 
   return newRequire;
-})({"index.js":[function(require,module,exports) {
-var m = 25;
-var s = 0;
-var clock = false;
-var playBtn = null;
+})({"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js":[function(require,module,exports) {
+var bundleURL = null;
 
-function sum() {
-  s = Number(s);
-  m = Number(m);
-  m++;
-
-  if (m < 10) {
-    m = "0" + String(m);
-  } else {
-    m = String(m);
+function getBundleURLCached() {
+  if (!bundleURL) {
+    bundleURL = getBundleURL();
   }
 
-  if (s < 10) {
-    s = "0" + String(s);
-  } else {
-    s = String(s);
-  }
-
-  document.querySelector("#count").textContent = m + " : " + s;
+  return bundleURL;
 }
 
-function dec() {
-  s = Number(s);
-  m = Number(m);
+function getBundleURL() {
+  // Attempt to find the URL of the current script and use that as the base URL
+  try {
+    throw new Error();
+  } catch (err) {
+    var matches = ('' + err.stack).match(/(https?|file|ftp|chrome-extension|moz-extension):\/\/[^)\n]+/g);
 
-  if (m > 0) {
-    m--;
+    if (matches) {
+      return getBaseURL(matches[0]);
+    }
   }
 
-  if (m < 10) {
-    m = "0" + String(m);
-  } else {
-    m = String(m);
-  }
-
-  if (s < 10) {
-    s = "0" + String(s);
-  } else {
-    s = String(s);
-  }
-
-  document.querySelector("#count").textContent = m + " : " + s;
+  return '/';
 }
 
-function base() {
-  playBtn = document.getElementById('play');
-  var element = React.createElement("div", null, React.createElement("span", {
-    id: "count"
-  }, " ", m, " : 0", s), React.createElement("div", {
-    id: "wrapBtn"
-  }, React.createElement("button", {
-    onClick: sum
-  }, "Plus"), React.createElement("br", null), React.createElement("button", {
-    id: "play",
-    onClick: start
-  }, "Play"), React.createElement("br", null), React.createElement("button", {
-    onClick: reset
-  }, "Reset"), React.createElement("br", null), React.createElement("button", {
-    onClick: dec
-  }, "Minus"), React.createElement("br", null)));
-  ReactDOM.render(element, document.querySelector("#root"));
-} // Init dom at this state
-
-
-base();
-
-function reset() {
-  document.querySelector("#count").textContent = "25:00";
-  clearInterval(clock);
-  s = 0;
-  m = 25;
+function getBaseURL(url) {
+  return ('' + url).replace(/^((?:https?|file|ftp|chrome-extension|moz-extension):\/\/.+)\/[^/]+$/, '$1') + '/';
 }
 
-function start() {
-  if (!clock) {
-    clock = setInterval(tick, 1000);
-    var playBtn = React.createElement("button", {
-      id: "play",
-      onClick: start
-    }, "Stop");
-  } else {
-    clearInterval(clock);
-    clock = false;
-    var playBtn = React.createElement("button", {
-      id: "play",
-      onClick: start
-    }, "Play");
+exports.getBundleURL = getBundleURLCached;
+exports.getBaseURL = getBaseURL;
+},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js":[function(require,module,exports) {
+var bundle = require('./bundle-url');
+
+function updateLink(link) {
+  var newLink = link.cloneNode();
+
+  newLink.onload = function () {
+    link.remove();
+  };
+
+  newLink.href = link.href.split('?')[0] + '?' + Date.now();
+  link.parentNode.insertBefore(newLink, link.nextSibling);
+}
+
+var cssTimeout = null;
+
+function reloadCSS() {
+  if (cssTimeout) {
+    return;
   }
 
-  var element = React.createElement("div", null, React.createElement("span", {
-    id: "count"
-  }, " ", m, " : ", s), React.createElement("div", {
-    id: "wrapBtn"
-  }, React.createElement("button", {
-    onClick: sum
-  }, "Plus"), React.createElement("br", null), playBtn, React.createElement("br", null), React.createElement("button", {
-    onClick: reset
-  }, "Reset"), React.createElement("br", null), React.createElement("button", {
-    onClick: dec
-  }, "Minus"), React.createElement("br", null)));
-  ReactDOM.render(element, document.querySelector("#root"));
-}
+  cssTimeout = setTimeout(function () {
+    var links = document.querySelectorAll('link[rel="stylesheet"]');
 
-function showTime() {
-  m = Number(m);
-  s = Number(s);
-
-  if (m > 0 || s > 0) {
-    if (s > 0) {
-      s--;
-    } else {
-      m--;
-      s = 59;
+    for (var i = 0; i < links.length; i++) {
+      if (bundle.getBaseURL(links[i].href) === bundle.getBundleURL()) {
+        updateLink(links[i]);
+      }
     }
 
-    if (s === 0 && m > 0) {
-      m--;
-      s = 59;
-    }
-
-    if (s === 0 && m === 0) {
-      clearInterval(clock);
-    }
-  } else {
-    clearInterval(clock);
-  }
-
-  if (m < 10) {
-    m = "0" + String(m);
-  } else {
-    m = String(m);
-  }
-
-  if (s < 10) {
-    s = "0" + String(s);
-  } else {
-    s = String(s);
-  }
-
-  return m + " : " + s;
+    cssTimeout = null;
+  }, 50);
 }
 
-function report() {
-  alert("Nope");
-} // Refresh the dom
+module.exports = reloadCSS;
+},{"./bundle-url":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/bundle-url.js"}],"sass/style.scss":[function(require,module,exports) {
+var reloadCSS = require('_css_loader');
 
-
-function tick() {
-  if (!clock) {
-    var element = React.createElement("div", null, React.createElement("span", {
-      id: "count"
-    }, showTime()), React.createElement("div", {
-      id: "wrapBtn"
-    }, React.createElement("button", {
-      onClick: sum
-    }, "Plus"), React.createElement("br", null), React.createElement("button", {
-      id: "play",
-      onClick: start
-    }, "Stop"), React.createElement("br", null), React.createElement("button", {
-      onClick: reset
-    }, "Reset"), React.createElement("br", null), React.createElement("button", {
-      onClick: dec
-    }, "Minus"), React.createElement("br", null)));
-    ReactDOM.render(element, document.querySelector("#root"));
-  } else {
-    var _element = React.createElement("div", null, React.createElement("span", {
-      id: "count"
-    }, showTime()), React.createElement("div", {
-      id: "wrapBtn"
-    }, React.createElement("button", {
-      onClick: sum
-    }, "Plus"), React.createElement("br", null), React.createElement("button", {
-      id: "play",
-      onClick: start
-    }, "Stop"), React.createElement("br", null), React.createElement("button", {
-      onClick: reset
-    }, "Reset"), React.createElement("br", null), React.createElement("button", {
-      onClick: dec
-    }, "Minus"), React.createElement("br", null)));
-
-    ReactDOM.render(_element, document.querySelector("#root"));
-  }
-}
-},{}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
+module.hot.dispose(reloadCSS);
+module.hot.accept(reloadCSS);
+},{"_css_loader":"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/css-loader.js"}],"../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js":[function(require,module,exports) {
 var global = arguments[3];
 var OVERLAY_ID = '__parcel__error__overlay__';
 var OldModule = module.bundle.Module;
@@ -508,5 +392,5 @@ function hmrAcceptRun(bundle, id) {
     return true;
   }
 }
-},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js","index.js"], null)
-//# sourceMappingURL=/Pomodoro.e31bb0bc.js.map
+},{}]},{},["../../../../usr/local/lib/node_modules/parcel-bundler/src/builtins/hmr-runtime.js"], null)
+//# sourceMappingURL=/style.500aa19d.js.map
