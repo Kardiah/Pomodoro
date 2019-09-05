@@ -149,7 +149,7 @@ class App extends Component {
           isStart={this.state.isStart}
         />
 
-        <audio id="beep" preload="auto" src="https://goo.gl/65cBl1" ref={this.audioBeep}></audio>
+        <audio id="beep" preload="auto" src="https://www.pacdv.com/sounds/voices/yes-4.wav" ref={this.audioBeep}></audio>
 
       </div>
     );
