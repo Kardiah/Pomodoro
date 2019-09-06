@@ -4,3 +4,5 @@
   - Comply with good organizational and programming practices
 
 This work is available on [Netlify](https://kardiah-pomodoro.netlify.com).
+
+<a href="https://kardiah-pomodoro.netlify.com" target="_blank">Netlify</a>
